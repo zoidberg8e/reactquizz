@@ -8,12 +8,14 @@ import * as firebase from 'firebase';
 import ApiKeys from './constants/ApiKeys';
 import RootNavigation from './navigation/RootNavigation';
 import HomeScreen from './components/HomeScreen';
+import DetailScreen from './components/DetailScreen';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 
 const playStackNavigator = createStackNavigator({
-    home: HomeScreen
+    home: HomeScreen,
+    detail: DetailScreen
 });
 
 // definiere navigationsziele für Bottom-Tab als JS-Objekt
@@ -55,8 +57,8 @@ const theme = {
     ...DefaultTheme,
     colors: {
         ...DefaultTheme.colors,
-        primary: 'tomato',
-        accent: 'yellow',
+        primary: 'black',
+        accent: '#CCFF00',
     },
 };
 
