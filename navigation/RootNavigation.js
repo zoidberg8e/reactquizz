@@ -1,55 +1,53 @@
 import { Notifications } from 'expo';
 import React from 'react';
-import { StackNavigator } from 'react-navigation';
-import MainTabNavigator from './MainTabNavigator';
-import registerForPushNotificationsAsync from '../api/registerForPushNotificationsAsync';
+import {createStackNavigator} from 'react-navigation-stack';
+import HomeScreen from './../components/HomeScreen';
 
 import LoginScreen from './../screens/auth/LoginScreen';
 import SignupScreen from './../screens/auth/SignupScreen';
 import ForgotPasswordScreen from './../screens/auth/ForgotPasswordScreen';
+import {createAppContainer} from "react-navigation";
 
-const RootStackNavigator = StackNavigator(
-  {
-    Login: { screen: LoginScreen },
-    Signup: { screen: SignupScreen },
-    ForgotPassword: { screen: ForgotPasswordScreen },
+const RootStackNavigator =
+    createStackNavigator({
+        Login: { screen: LoginScreen },
+        Signup: { screen: SignupScreen },
+        ForgotPassword: { screen: ForgotPasswordScreen },
 
-    Main: { screen: MainTabNavigator, },
-  },
-  {
-    navigationOptions: () => ({
-      headerTitleStyle: {
-        fontWeight: 'normal',
-      },
-    }),
-  }
+        Main: { screen: HomeScreen, },
+    },
+    {
+        navigationOptions: () => ({
+            headerTitleStyle: {
+                fontWeight: 'normal',
+            },
+        }),
+    }
 );
 
+const Navigator = createAppContainer(RootStackNavigator);
+
+
 export default class RootNavigator extends React.Component {
-  componentDidMount() {
-    this._notificationSubscription = this._registerForPushNotifications();
-  }
 
-  componentWillUnmount() {
-    this._notificationSubscription && this._notificationSubscription.remove();
-  }
+    componentDidMount() {
+        this._notificationSubscription = this._registerForPushNotifications();
+    }
 
-  render() {
-    return <RootStackNavigator />;
-  }
+    componentWillUnmount() {
+        this._notificationSubscription && this._notificationSubscription.remove();
+    }
 
-  _registerForPushNotifications() {
-    // Send our push token over to our backend so we can receive notifications
-    // You can comment the following line out if you want to stop receiving
-    // a notification every time you open the app. Check out the source
-    // for this function in api/registerForPushNotificationsAsync.js
-    registerForPushNotificationsAsync();
+    render() {
+        return <Navigator />;
+    }
 
-    // Watch for incoming notifications
-    this._notificationSubscription = Notifications.addListener(this._handleNotification);
-  }
+    _registerForPushNotifications() {
+        // Watch for incoming notifications
+        this._notificationSubscription = Notifications.addListener(this._handleNotification);
+    }
 
-  _handleNotification = ({ origin, data }) => {
-    console.log(`Push notification ${origin} with data: ${JSON.stringify(data)}`);
-  };
+    _handleNotification = ({ origin, data }) => {
+        console.log(`Push notification ${origin} with data: ${JSON.stringify(data)}`);
+    };
 }
