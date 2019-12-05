@@ -9,13 +9,18 @@ import ApiKeys from './constants/ApiKeys';
 import RootNavigation from './navigation/RootNavigation';
 import HomeScreen from './components/HomeScreen';
 import DetailScreen from './components/DetailScreen';
+import DetailQuestions from './components/DetailQuestions';
+import Quizz from './components/Quizz';
+
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 
 const playStackNavigator = createStackNavigator({
     home: HomeScreen,
-    detail: DetailScreen
+    detail: DetailScreen,
+    detailquestions: DetailQuestions,
+    quizz:Quizz
 });
 
 // definiere navigationsziele für Bottom-Tab als JS-Objekt
