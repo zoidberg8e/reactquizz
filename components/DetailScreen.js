@@ -1,14 +1,22 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, ScrollView } from 'react-native';
+import { TextInput } from 'react-native-paper';
 
 const questions = [];
-let test = this.props.navigation.getparam("categories");
-console.log(test);
-export default function DetailScreen() {
+
+
+
+export default function DetailScreen(props) {
+  props.navigation.getParam('category');
   return (
-    <View style={styles.container}>
+    <ScrollView>
+      <Text>Name dieser Kategorie:</Text>
+      <TextInput
+      editable/>
       <Text>Fragen in dieser Kategorie:</Text>
-    </View>
+      <TextInput
+      editable/>
+    </ScrollView>
   );
 }
 
