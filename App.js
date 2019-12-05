@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { createAppContainer } from 'react-navigation';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { createStackNavigator } from 'react-navigation-stack';
@@ -19,7 +19,7 @@ const stackNavigator = createStackNavigator({
 
 // definiere navigationsziele für Bottom-Tab als JS-Objekt
 const destinations = {
-  zuhause: stackNavigator,
+  Home: stackNavigator,
   settings: SettingsScreen
 };
 
@@ -27,7 +27,7 @@ const destinations = {
 const bottomTabNav = createBottomTabNavigator(destinations);
 
 // HauptNavigationr
-const navigator = createAppContainer(bottomTabNav);
+const Navigator = createAppContainer(bottomTabNav);
 
 export default class App extends Component {
     constructor(props) {
