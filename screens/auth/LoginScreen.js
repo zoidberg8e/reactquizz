@@ -1,14 +1,14 @@
-
 import React from 'react';
-import { StyleSheet, View, Text, TextInput, Button, Alert } from 'react-native';
-import { NavigationActions } from 'react-navigation';
+import {StyleSheet, View, Text, Alert} from 'react-native';
+import {NavigationActions, StackActions} from 'react-navigation';
 import * as firebase from 'firebase';
+import {Button, TextInput} from 'react-native-paper';
 
 export default class LoginScreen extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = { 
+        this.state = {
             email: "",
             password: "",
         };
@@ -16,11 +16,14 @@ export default class LoginScreen extends React.Component {
 
     onLoginPress = () => {
         firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
-            .then(() => { }, (error) => { Alert.alert(error.message); });
+            .then(() => {
+            }, (error) => {
+                Alert.alert(error.message);
+            });
     }
 
     onCreateAccountPress = () => {
-        var navActions = NavigationActions.reset({
+        let navActions = StackActions.reset({
             index: 0,
             actions: [NavigationActions.navigate({routeName: "Signup"})]
         });
@@ -28,7 +31,7 @@ export default class LoginScreen extends React.Component {
     }
 
     onForgotPasswordPress = () => {
-        var navActions = NavigationActions.reset({
+        let navActions = StackActions.reset({
             index: 0,
             actions: [NavigationActions.navigate({routeName: "ForgotPassword"})]
         });
@@ -37,38 +40,50 @@ export default class LoginScreen extends React.Component {
 
     render() {
         return (
-            <View style={{paddingTop:50, alignItems:"center"}}>
+            <View style={{paddingTop: 50, alignItems: "center"}}>
 
-                <Text>Login</Text> 
+                <Text>Anmeldung</Text>
 
-                <TextInput style={{width: 200, height: 40, borderWidth: 1}}
-                    value={this.state.email}
-                    onChangeText={(text) => { this.setState({email: text}) }}
-                    placeholder="Email"
-                    keyboardType="email-address"
-                    autoCapitalize="none"
-                    autoCorrect={false}
+                <TextInput style={styles.input}
+                           value={this.state.email}
+                           onChangeText={(text) => {
+                               this.setState({email: text})
+                           }}
+                           label="Email"
+                           keyboardType="email-address"
+                           autoCapitalize="none"
+                           autoCorrect={false}
                 />
 
-                <View style={{paddingTop:10}} />
+                <View style={{paddingTop: 10}}/>
 
-                <TextInput style={{width: 200, height: 40, borderWidth: 1}}
-                    value={this.state.password}
-                    onChangeText={(text) => { this.setState({password: text}) }}
-                    placeholder="Password"
-                    secureTextEntry={true}
-                    autoCapitalize="none"
-                    autoCorrect={false}
+                <TextInput style={styles.input}
+                           value={this.state.password}
+                           onChangeText={(text) => {
+                               this.setState({password: text})
+                           }}
+                           label="Password"
+                           secureTextEntry={true}
+                           autoCapitalize="none"
+                           autoCorrect={false}
                 />
 
-                <Button title="Login" onPress={this.onLoginPress} />
-                <Button title="Create account..." onPress={this.onCreateAccountPress} />
-                <Button title="Forgot Password..." onPress={this.onForgotPasswordPress} />
+                <Button mode='contained' style={styles.button} title="Anmeldung" onPress={this.onLoginPress}>Anmeldung</Button>
+                <Button mode='contained' style={styles.button} title="Registrieren"
+                        onPress={this.onCreateAccountPress}>Registrieren</Button>
+                <Button mode='contained' style={styles.button} title="Passwort vergessen"
+                        onPress={this.onForgotPasswordPress}>Passwort vergessen</Button>
             </View>
         );
     }
 }
 
 const styles = StyleSheet.create({
-
+    input: {
+        width: 250, height: 60,  marginBottom: 10
+    },
+    button: {
+        marginBottom: 10,
+        width: 250
+    }
 });

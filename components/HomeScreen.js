@@ -1,5 +1,7 @@
 import React from 'react';
 import { Button, StyleSheet, Text, View } from 'react-native';
+import * as firebase from 'firebase';
+
 
 export default function HomeScreen(props) {
   return (
@@ -9,6 +11,7 @@ export default function HomeScreen(props) {
         title="Gehe zu DetailScreen"
         onPress={() => props.navigation.navigate('detail')}
       />
+        <Button style={styles.spacer} title="Ausloggen" onPress={() =>     firebase.auth().signOut()} mode="contained">Ausloggen</Button>
     </View>
   );
 }

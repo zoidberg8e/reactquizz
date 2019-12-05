@@ -1,8 +1,9 @@
 
 import React from 'react';
-import { StyleSheet, View, Text, TextInput, Button, Alert } from 'react-native';
-import { NavigationActions } from 'react-navigation';
+import { StyleSheet, View, Text, Alert } from 'react-native';
+import { NavigationActions, StackActions } from 'react-navigation';
 import * as firebase from 'firebase';
+import {Button, TextInput} from 'react-native-paper';
 
 export default class ForgotPasswordScreen extends React.Component {
 
@@ -16,14 +17,14 @@ export default class ForgotPasswordScreen extends React.Component {
     onResetPasswordPress = () => {
         firebase.auth().sendPasswordResetEmail(this.state.email)
             .then(() => {
-                Alert.alert("Password reset email has been sent.");
+                Alert.alert("Die E-Mail zum zurücksetzen ihres Passworts wurde verschickt.");
             }, (error) => {
                 Alert.alert(error.message);
             });
     }
 
     onBackToLoginPress = () => {
-        var navActions = NavigationActions.reset({
+        var navActions = StackActions.reset({
             index: 0,
             actions: [NavigationActions.navigate({routeName: "Login"})]
         });
@@ -34,24 +35,30 @@ export default class ForgotPasswordScreen extends React.Component {
         return (
             <View style={{paddingTop:50, alignItems:"center"}}>
 
-                <Text>Forgot Password</Text>
+                <Text>Passwort vergessen</Text>
 
-                <TextInput style={{width: 200, height: 40, borderWidth: 1}}
+                <TextInput style={styles.input}
                     value={this.state.email}
                     onChangeText={(text) => { this.setState({email: text}) }}
-                    placeholder="Email"
+                    label="Email"
                     keyboardType="email-address"
                     autoCapitalize="none"
                     autoCorrect={false}
                 />
 
-                <Button title="Reset Password" onPress={this.onResetPasswordPress} />
-                <Button title="Back to Login..." onPress={this.onBackToLoginPress} />
+                <Button style={styles.button} mode='contained' title="Passwort zurücksetzen" onPress={this.onResetPasswordPress} >Passwort zurücksetzen</Button>
+                <Button style={styles.button} mode='contained' title="Zurück zu Anmeldung" onPress={this.onBackToLoginPress} >Zurück zu Anmeldung</Button>
             </View>
         );
     }
 }
 
 const styles = StyleSheet.create({
-
+    input: {
+        width: 250, height: 60,  marginBottom: 10
+    },
+    button: {
+        marginBottom: 10,
+        width: 250
+    }
 });
