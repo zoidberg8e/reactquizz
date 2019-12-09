@@ -2,21 +2,27 @@ import React from 'react';
 import { StyleSheet, Text, ScrollView, Button } from 'react-native';
 import { TextInput } from 'react-native-paper';
 
-const questions = [];
+const answers = [];
 
-export default function DetailScreen(props) {
-  props.navigation.getParam('category');
-  return (
-    <ScrollView>
-      <Text>Fragen in dieser Kategorie:</Text>
-      {questions.map((question,key)=> (<View style={styles.wrapper} key={key}>
-        <Button
-        title={question.title}
-        onPress={() => props.navigation.navigate('detailquestions',{question:question})}
-        />
-      </View>))}
-    </ScrollView>
-  );
+export default class DetailScreen extends React.Component {
+  componentDidMount(){
+    
+  }
+  render(){
+    this.props.navigation.getParam('category');
+    return (
+      <ScrollView>
+        <Text>Fragen in dieser Kategorie:</Text>
+        {answers.map((answer,key)=> (<View style={styles.wrapper} key={key}>
+          <Button
+          style={styles.button}
+          title={answer.title}
+          onPress={() => this.props.navigation.navigate('detailquestions',{question:question})}
+          />
+        </View>))}
+      </ScrollView>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
@@ -25,5 +31,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  button:{
+    margin:5,
   }
 });

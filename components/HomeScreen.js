@@ -4,24 +4,33 @@ import * as firebase from 'firebase';
 
 const categories = [];
 
-export default function HomeScreen(props) {
-  return (
-    <ScrollView>
-      <Text>Kategorien:</Text>
-      <Button
-        title="Kategorie hinzufügen"
-        onPress={() => props.navigation.navigate('detail')}
-      />
-      {categories.map((category,key)=> (<View style={styles.wrapper} key={key}>
+export default class HomeScreen extends React.Component {
+  componentDidMount(){
+    
+  }
+  render(){
+    return (
+      <ScrollView>
+        <Text>Kategorien:</Text>
         <Button
-        title={category.title}
-        onPress={() => props.navigation.navigate('detail',{category:category})}
+          style={styles.button}
+          title="Kategorie hinzufügen"
+          onPress={() => this.props.navigation.navigate('detail')}
         />
-      </View>))}
-      
-        <Button style={styles.spacer} title="Ausloggen" onPress={() =>     firebase.auth.signOut()} mode="contained">Ausloggen</Button>
-    </ScrollView>
-  );
+        <Text/>
+        {categories.map((category,key)=> (<View style={styles.wrapper} key={key}>
+          <Button
+          style={styles.button}
+          title={category.title}
+          onPress={() => this.props.navigation.navigate('detail',{category:category})}
+          />
+        <Text/>
+        </View>))}
+        
+          <Button style={styles.spacer} title="Ausloggen" onPress={() =>     firebase.auth.signOut()} mode="contained">Ausloggen</Button>
+      </ScrollView>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
@@ -29,6 +38,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+  },
+  button: {
+    margin:15,
+    borderColor: 'black',
   }
 });

@@ -4,32 +4,45 @@ import { TextInput } from 'react-native-paper';
 
 const questions = [];
 
-
-
-export default function DetailScreen(props) {
-  props.navigation.getParam('category');
-  return (
-    <ScrollView>
-      <Text>Name dieser Kategorie:</Text>
-      <TextInput
-      editable/>
-      <Text>Fragen in dieser Kategorie:</Text>
-      <Button
-        title="Frage hinzufügen"
-        onPress={() => props.navigation.navigate('detailquestions')}
-      />
-      {questions.map((question,key)=> (<View style={styles.wrapper} key={key}>
+export default class DetailScreen extends React.Component {
+  componentDidMount(){
+    
+  }
+  render(){
+    this.props.navigation.getParam('category');
+    return (
+      <ScrollView>
+        <Text>Name dieser Kategorie:</Text>
+        <TextInput
+        editable/>
+        <Text>Fragen in dieser Kategorie:</Text>
         <Button
-        title={question.title}
-        onPress={() => props.navigation.navigate('detailquestions',{question:question})}
+          style={styles.button}
+          title="Frage hinzufügen"
+          onPress={() => this.props.navigation.navigate('detailquestions')}
         />
-      </View>))}
-      <Button
-      title="Quizz starten"
-      onPress={() => props.navigation.navigate('quizz')}
-      />
-    </ScrollView>
-  );
+        <Text/>
+        {questions.map((question,key)=> (<View style={styles.wrapper} key={key}>
+          <Button
+            style={styles.button}
+            title={question.title}
+            onPress={() => this.props.navigation.navigate('detailquestions',{question:question})}
+          />
+        <Text/>
+        </View>))}
+        <Button
+          style={styles.button}
+          title="Quizz starten"
+          onPress={() => this.props.navigation.navigate('quizz')}
+        />
+        <Text/>
+        <Button
+          style={styles.button} 
+          title="save"
+        />
+      </ScrollView>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
@@ -38,5 +51,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  button: {
+    margin:15,
+    borderColor: 'black',
   }
 });
