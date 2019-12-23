@@ -1,12 +1,33 @@
 import React from 'react';
-import { StyleSheet, Text, ScrollView, Button } from 'react-native';
+import { StyleSheet, Text, ScrollView, Button, View } from 'react-native';
 import { TextInput } from 'react-native-paper';
+import * as firebase from 'firebase';
+import 'firebase/firestore';
+import 'firebase/auth';
 
-const questions = [];
+var questions = [ 
+  {key: 'Devin'},
+  {key: 'Dan'},
+  {key: 'Dominic'},
+  {key: 'Jackson'},
+  {key: 'James'},
+  {key: 'Joel'},
+  {key: 'John'},
+  {key: 'Jillian'},
+  {key: 'Jimmy'},
+  {key: 'Julie'},];
+  var title = "";
 
 export default class DetailScreen extends React.Component {
+  async getQuestions() {
+    const snapshot = await firebase.firestore().collection('categories').get();
+    return snapshot.docs.map(doc => doc.data());
+  } 
+  async addCategory(category){
+    const snapshot = await firebase.firestore().collection('categories').add(category)
+  }
   componentDidMount(){
-    
+   questions = this.getQuestions(); 
   }
   render(){
     this.props.navigation.getParam('category');
@@ -14,7 +35,8 @@ export default class DetailScreen extends React.Component {
       <ScrollView>
         <Text>Name dieser Kategorie:</Text>
         <TextInput
-        editable/>
+          onChangeText = {text => title = text}
+          editable/>
         <Text>Fragen in dieser Kategorie:</Text>
         <Button
           style={styles.button}
@@ -25,7 +47,7 @@ export default class DetailScreen extends React.Component {
         {questions.map((question,key)=> (<View style={styles.wrapper} key={key}>
           <Button
             style={styles.button}
-            title={question.title}
+            title={question.key}
             onPress={() => this.props.navigation.navigate('detailquestions',{question:question})}
           />
         <Text/>
@@ -39,6 +61,7 @@ export default class DetailScreen extends React.Component {
         <Button
           style={styles.button} 
           title="save"
+          onpress={()=> this.addCategory({name:title})}
         />
       </ScrollView>
     );

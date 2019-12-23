@@ -79,6 +79,7 @@ export default class App extends Component {
         // Initialize firebase...
         if (!firebase.apps.length) {
             firebase.initializeApp(ApiKeys.FirebaseConfig);
+            console.log("initialized firebase");
         }
         firebase.auth().onAuthStateChanged(this.onAuthStateChanged);
     }
