@@ -77,11 +77,13 @@ export default class App extends Component {
         };
 
         // Initialize firebase...
+        var app;
         if (!firebase.apps.length) {
-            firebase.initializeApp(ApiKeys.FirebaseConfig);
+            app = firebase.initializeApp(ApiKeys.FirebaseConfig);
             console.log("initialized firebase");
         }
         firebase.auth().onAuthStateChanged(this.onAuthStateChanged);
+        export const db = app.database();
     }
 
     onAuthStateChanged = (user) => {
