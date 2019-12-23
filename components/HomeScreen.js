@@ -3,6 +3,9 @@ import { Button, StyleSheet, Text, ScrollView, View, ActivityIndicatorComponent 
 import * as firebase from 'firebase';
 import 'firebase/firestore';
 import 'firebase/auth';
+import { db } from '../App.js';
+
+let categoriesRef = db.ref();
 
 //i think (hope) i wont need that again...
 //import firestore from '@react-native-firebase/firestore';
@@ -18,7 +21,13 @@ export default class HomeScreen extends React.Component {
     return snapshot.docs.map(doc => doc.data());
   } 
   componentDidMount(){
-    categories = this.getCategories();
+    //categories = this.getCategories();
+    categoriesRef.on('name', snapshot => {
+      let data = snapshot.val();
+      let categories = Object.values(data);
+      this.setState({ categories });
+    });
+    console.log(categories);
   }
   render(){
     return (

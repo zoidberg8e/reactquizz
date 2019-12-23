@@ -24,10 +24,11 @@ export default class DetailScreen extends React.Component {
     return snapshot.docs.map(doc => doc.data());
   } 
   async addCategory(category){
+    console.log('adsads');
     const snapshot = await firebase.firestore().collection('categories').add(category)
   }
   componentDidMount(){
-   questions = this.getQuestions(); 
+    questions = this.getQuestions(); 
   }
   render(){
     this.props.navigation.getParam('category');
