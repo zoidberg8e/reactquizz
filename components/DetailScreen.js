@@ -53,13 +53,13 @@ export default class DetailScreen extends React.Component {
     console.log(this.state.category);
   }
   render(){
-    this.props.navigation.getParam('category');
+    this.state.category = this.props.navigation.getParam('category');
     return (
       <ScrollView>
         <Text>Name dieser Kategorie:</Text>
         <TextInput
           onChange={this.handleChange}
-          placeholder= {this.state.category}
+          placeholder= {this.props.navigation.getParam('category', '')}
           editable/>
         <Text>Fragen in dieser Kategorie:</Text>
         <Button
