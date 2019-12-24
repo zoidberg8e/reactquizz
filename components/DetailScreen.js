@@ -6,9 +6,10 @@ import 'firebase/firestore';
 import 'firebase/auth';
 import { db } from '../firebase';
 
-//var category = this.props.navigation.getParam('category');
+//var category = this.props.navigation.state.params.category;
+var category = 'neineinein';
+
 var questions = [];
-category = "penis";
 
 let addCategory = item => {
   db.ref('/categories').push({
@@ -58,6 +59,7 @@ export default class DetailScreen extends React.Component {
         <Text>Name dieser Kategorie:</Text>
         <TextInput
           onChange={this.handleChange}
+          placeholder= {this.state.category}
           editable/>
         <Text>Fragen in dieser Kategorie:</Text>
         <Button

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, StyleSheet, Text, ScrollView, View, ActivityIndicatorComponent } from 'react-native';
+import { Button, StyleSheet, Text, ScrollView, View } from 'react-native';
 import * as firebase from 'firebase';
 import 'firebase/firestore';
 import 'firebase/auth';
@@ -40,7 +40,7 @@ export default class HomeScreen extends React.Component {
           <Button
             style={styles.button}
             title={category.name}
-            onPress={() => this.props.navigation.navigate('detail',{category:category})}
+            onPress={() => this.props.navigation.navigate('detail',{category: category.name})}
           />
         <Text/>
         </View>))}
