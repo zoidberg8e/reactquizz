@@ -3,31 +3,25 @@ import { Button, StyleSheet, Text, ScrollView, View, ActivityIndicatorComponent 
 import * as firebase from 'firebase';
 import 'firebase/firestore';
 import 'firebase/auth';
-import { db } from '../App.js';
+import { app, db } from '../firebase.js';
 
-let categoriesRef = db.ref();
-
-//i think (hope) i wont need that again...
-//import firestore from '@react-native-firebase/firestore';
-//var categories = firestore.collection("categories");
-//var categoriesRef = firebase.firestore.CollectionReference('categories');
-//var categories = [];
-
-var categories = [];
-
+let categoriesRef = db.ref('/categories');
 export default class HomeScreen extends React.Component {
-  async getCategories() {
-    const snapshot = await firebase.firestore().collection('categories').get();
-    return snapshot.docs.map(doc => doc.data());
-  } 
+  state = {
+    categories: []
+  };
   componentDidMount(){
-    //categories = this.getCategories();
-    categoriesRef.on('name', snapshot => {
+    categoriesRef.on('value', snapshot => {
       let data = snapshot.val();
-      let categories = Object.values(data);
-      this.setState({ categories });
+      if( data ){
+        let categories = Object.values(data);
+        this.setState({ categories });
+      } else {
+        console.log("category data is empty");
+        console.log(data)
+      }
     });
-    console.log(categories);
+    console.log(this.state.categories);
   }
   render(){
     return (
@@ -39,7 +33,7 @@ export default class HomeScreen extends React.Component {
           onPress={() => this.props.navigation.navigate('detail')}
         />
         <Text/>
-        {categories.map((category,name)=> (<View style={styles.wrapper} name={name}>
+        {this.state.categories.map((category,name)=> (<View style={styles.wrapper} name={name}>
           <Button
             style={styles.button}
             title={category.name}
@@ -48,7 +42,7 @@ export default class HomeScreen extends React.Component {
         <Text/>
         </View>))}
         
-          <Button style={styles.spacer} title="Ausloggen" onPress={() => firebase.auth.signOut()} mode="contained">Ausloggen</Button>
+          <Button style={styles.spacer} title="Ausloggen" onPress={() => firebase.auth(app).signOut()} mode="contained">Ausloggen</Button>
       </ScrollView>
     );
   }

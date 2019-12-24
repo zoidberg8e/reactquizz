@@ -4,31 +4,46 @@ import { TextInput } from 'react-native-paper';
 import * as firebase from 'firebase';
 import 'firebase/firestore';
 import 'firebase/auth';
+import { db } from '../firebase';
 
-var questions = [ 
-  {key: 'Devin'},
-  {key: 'Dan'},
-  {key: 'Dominic'},
-  {key: 'Jackson'},
-  {key: 'James'},
-  {key: 'Joel'},
-  {key: 'John'},
-  {key: 'Jillian'},
-  {key: 'Jimmy'},
-  {key: 'Julie'},];
-  var title = "";
+let addCategory = item => {
+  db.ref('/categories').push({
+    name: item
+  });
+};
+
+let questionsRef = db.ref('/questions');
 
 export default class DetailScreen extends React.Component {
-  async getQuestions() {
-    const snapshot = await firebase.firestore().collection('categories').get();
-    return snapshot.docs.map(doc => doc.data());
-  } 
-  async addCategory(category){
-    console.log('adsads');
-    const snapshot = await firebase.firestore().collection('categories').add(category)
+  state = {
+    name: '',
+    category: '',
+    questions: []
+  };
+  
+  handleChange = e => {
+    this.setState({
+      name: e.nativeEvent.text
+    });
   }
+
+  handleSubmit = () => {
+    addCategory(this.state.name);
+    console.log(this.state.name);
+  };
+
   componentDidMount(){
-    questions = this.getQuestions(); 
+    questionsRef.on('value', snapshot => {
+      let data = snapshot.val();
+      if( data ){
+        let questions = Object.values(data);
+        this.setState({ questions });
+      } else {
+        console.log("Question data is empty");
+        console.log(data)
+      }
+    });
+    console.log(this.state.questions);
   }
   render(){
     this.props.navigation.getParam('category');
@@ -36,7 +51,7 @@ export default class DetailScreen extends React.Component {
       <ScrollView>
         <Text>Name dieser Kategorie:</Text>
         <TextInput
-          onChangeText = {text => title = text}
+          onChange={this.handleChange}
           editable/>
         <Text>Fragen in dieser Kategorie:</Text>
         <Button
@@ -45,7 +60,7 @@ export default class DetailScreen extends React.Component {
           onPress={() => this.props.navigation.navigate('detailquestions')}
         />
         <Text/>
-        {questions.map((question,key)=> (<View style={styles.wrapper} key={key}>
+        {this.state.questions.map((question,key)=> (<View style={styles.wrapper} key={key}>
           <Button
             style={styles.button}
             title={question.key}
@@ -62,7 +77,7 @@ export default class DetailScreen extends React.Component {
         <Button
           style={styles.button} 
           title="save"
-          onpress={()=> this.addCategory({name:title})}
+          onPress={() => this.handleSubmit()}
         />
       </ScrollView>
     );

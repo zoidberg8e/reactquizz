@@ -5,7 +5,6 @@ import {createBottomTabNavigator} from 'react-navigation-tabs';
 import {createStackNavigator} from 'react-navigation-stack';
 import {DefaultTheme, Provider as PaperProvider} from 'react-native-paper';
 import * as firebase from 'firebase';
-import ApiKeys from './constants/ApiKeys';
 import RootNavigation from './navigation/RootNavigation';
 import HomeScreen from './components/HomeScreen';
 import DetailScreen from './components/DetailScreen';
@@ -76,14 +75,8 @@ export default class App extends Component {
             isAuthenticated: false,
         };
 
-        // Initialize firebase...
-        var app;
-        if (!firebase.apps.length) {
-            app = firebase.initializeApp(ApiKeys.FirebaseConfig);
-            console.log("initialized firebase");
-        }
+        // Firebase check authentication
         firebase.auth().onAuthStateChanged(this.onAuthStateChanged);
-        export const db = app.database();
     }
 
     onAuthStateChanged = (user) => {

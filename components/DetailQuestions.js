@@ -4,19 +4,57 @@ import { TextInput } from 'react-native-paper';
 import * as firebase from 'firebase';
 import 'firebase/firestore';
 import 'firebase/auth';
+import { db } from '../firebase';
 
-const answers = [];
-var title = "";
+let addCategory = item => {
+  db.ref('/questions').push({
+    name: item
+  });
+};
+
+let answersRef = db.ref('/answers');
+
 export default class DetailScreen extends React.Component {
-    async getAnswers() {
-      const snapshot = await firebase.firestore().collection('categories').get();
-      return snapshot.docs.map(doc => doc.data());
-    } 
-    async addQuestion (question){
-      const snapshot = await firebase.firestore().collection('question').add(question)
-    }
-  componentDidMount(){
+  state = {
+    name: '',
+    category: '',
+    question: '',
+    answer1: '',
+    answer2: '',
+    answer3: '',
+    answer4: '',
+    answer5: '',
+    answer6: '',
+    answer7: '',
+    answer8: '',
+    answer9: '',
+    answers: []
+  };
+  
+  handleChange = e => {
+    this.setState({
+      name: e.nativeEvent.text
+    });
   }
+
+  handleSubmit = () => {
+    addCategory(this.state.name);
+  };
+
+  componentDidMount(){
+    answersRef.on('value', snapshot => {
+      let data = snapshot.val();
+      if( data ){
+        let answers = Object.values(data);
+        this.setState({ answers });
+      } else {
+        console.log("Answers data is empty");
+        console.log(data)
+      }
+    });
+    console.log(this.state.answers);
+  }
+
   render(){
     this.props.navigation.getParam('question');
     return (
@@ -53,7 +91,7 @@ export default class DetailScreen extends React.Component {
         <Button
           style={styles.button} 
           title="save"
-          onpress={()=> this.addQuestion({name:title})}
+          onPress={()=> this.addQuestion({name:title})}
         />
       </ScrollView>
     );
