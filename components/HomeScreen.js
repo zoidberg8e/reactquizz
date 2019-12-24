@@ -5,13 +5,16 @@ import 'firebase/firestore';
 import 'firebase/auth';
 import { app, db } from '../firebase.js';
 
+
+var categories = []
+
 let categoriesRef = db.ref('/categories');
 export default class HomeScreen extends React.Component {
   state = {
-    categories: []
+    categories: categories
   };
   componentDidMount(){
-    categoriesRef.on('value', snapshot => {
+  categoriesRef.on('value', snapshot => {
       let data = snapshot.val();
       if( data ){
         let categories = Object.values(data);

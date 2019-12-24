@@ -6,6 +6,10 @@ import 'firebase/firestore';
 import 'firebase/auth';
 import { db } from '../firebase';
 
+//var category = this.props.navigation.getParam('category');
+var questions = [];
+category = "penis";
+
 let addCategory = item => {
   db.ref('/categories').push({
     name: item
@@ -17,8 +21,8 @@ let questionsRef = db.ref('/questions');
 export default class DetailScreen extends React.Component {
   state = {
     name: '',
-    category: '',
-    questions: []
+    category: category,
+    questions: questions,
   };
   
   handleChange = e => {
@@ -43,7 +47,9 @@ export default class DetailScreen extends React.Component {
         console.log(data)
       }
     });
+    console.log("this is the detail screen speaking:\n");
     console.log(this.state.questions);
+    console.log(this.state.category);
   }
   render(){
     this.props.navigation.getParam('category');
