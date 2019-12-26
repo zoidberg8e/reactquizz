@@ -56,13 +56,15 @@ export default class DetailScreen extends React.Component {
     questionsRef.on('value', snapshot => {
       let data = snapshot.val();
       if( data ){
-        let questions = Object.values(data);
-        questions.map((question)=> {
+        let unsortedQuestions = Object.values(data);
+        let questions = [];
+        unsortedQuestions.map((question)=> {
           if( question.category == this.state.category){
             console.log('there is a question in this category');
-            this.state.questions.push(question);
+            questions.push(question);
           };
-        })
+        });
+        this.setState({ questions });
       } else {
         console.log("Question data is empty");
         console.log(data)
