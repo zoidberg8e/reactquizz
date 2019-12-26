@@ -73,6 +73,8 @@ export default class DetailScreen extends React.Component {
   }
   render(){
     this.state.category = this.props.navigation.getParam('category');
+    console.log("this are the questions from detail");
+    console.log(this.state.questions);
     return (
       <ScrollView>
         <Text>Name dieser Kategorie:</Text>
@@ -98,7 +100,7 @@ export default class DetailScreen extends React.Component {
         <Button
           style={styles.button}
           title="Quizz starten"
-          onPress={() => this.props.navigation.navigate('quizz',{category:this.state.category})}
+          onPress={() => this.props.navigation.navigate('quizz',{questions:this.state.questions, category: this.state.category})}
         />
         <Text/>
         <Button
