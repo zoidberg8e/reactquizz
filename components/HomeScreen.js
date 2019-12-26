@@ -24,7 +24,6 @@ export default class HomeScreen extends React.Component {
         console.log(data)
       }
     });
-    console.log(this.state.categories);
   }
   render(){
     return (

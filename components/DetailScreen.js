@@ -7,17 +7,28 @@ import 'firebase/auth';
 import { db } from '../firebase';
 
 //var category = this.props.navigation.state.params.category;
-var category = 'neineinein';
-
+var category = '';
+let questionsRef = db.ref('/questions');
+let categoriesRef = db.ref('/categories');
 var questions = [];
 
 let addCategory = item => {
-  db.ref('/categories').push({
+  categoriesRef.push({
     name: item
   });
 };
 
-let questionsRef = db.ref('/questions');
+let rmCategory = item => {
+  categoriesRef.child(item).remove()
+  .then(function() {
+    console.log("Remove succeeded.")
+    console.log(item);
+  })
+  .catch(function(error) {
+    console.log("Remove failed: " + error.message)
+  });
+}
+
 
 export default class DetailScreen extends React.Component {
   state = {
@@ -37,20 +48,26 @@ export default class DetailScreen extends React.Component {
     console.log(this.state.name);
   };
 
+  handleRemove = () => {
+    rmCategory(this.state.name);
+  }
+
   componentDidMount(){
     questionsRef.on('value', snapshot => {
       let data = snapshot.val();
       if( data ){
         let questions = Object.values(data);
-        this.setState({ questions });
+        questions.map((question)=> {
+          if( question.category == this.state.category){
+            console.log('there is a question in this category');
+            this.state.questions.push(question);
+          };
+        })
       } else {
         console.log("Question data is empty");
         console.log(data)
       }
     });
-    console.log("this is the detail screen speaking:\n");
-    console.log(this.state.questions);
-    console.log(this.state.category);
   }
   render(){
     this.state.category = this.props.navigation.getParam('category');
@@ -65,27 +82,33 @@ export default class DetailScreen extends React.Component {
         <Button
           style={styles.button}
           title="Frage hinzufügen"
-          onPress={() => this.props.navigation.navigate('detailquestions')}
+          onPress={() => this.props.navigation.navigate('detailquestions',{category:this.state.category})}
         />
         <Text/>
-        {this.state.questions.map((question,key)=> (<View style={styles.wrapper} key={key}>
+        {this.state.questions.map((question,name)=> (<View style={styles.wrapper} name={name}>
           <Button
             style={styles.button}
-            title={question.key}
-            onPress={() => this.props.navigation.navigate('detailquestions',{question:question})}
+            title={question.name}
+            onPress={() => this.props.navigation.navigate('detailquestions',{question:question, category:this.state.category})}
           />
         <Text/>
         </View>))}
         <Button
           style={styles.button}
           title="Quizz starten"
-          onPress={() => this.props.navigation.navigate('quizz')}
+          onPress={() => this.props.navigation.navigate('quizz',{category:this.state.category})}
         />
         <Text/>
         <Button
           style={styles.button} 
           title="save"
           onPress={() => this.handleSubmit()}
+        />
+        <Text/>
+        <Button
+          style={styles.button} 
+          title="delete"
+          onPress={() => this.handleRemove()}
         />
       </ScrollView>
     );
