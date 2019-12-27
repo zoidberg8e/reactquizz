@@ -8,18 +8,14 @@ import { db } from '../firebase';
 
 const questionsRef = db.ref('/questions');
 var gotParam = 0;
+var answers = [];
 
 let addQuestion = item => {
   console.log(item);
   questionsRef.push({
     name: item.name,
     category: item.category,
-    answer1: item.answer1,
-    answer2: item.answer2,
-    answer3: item.answer3,
-    answer4: item.answer4,
-    answer5: item.answer5,
-    answer6: item.answer6,
+    answers: item.answers,
   });
 };
 
@@ -38,54 +34,75 @@ export default class DetailScreen extends React.Component {
   state = {
     name: '',
     category: '',
-    answer1: '',
-    answer2: '',
-    answer3: '',
-    answer4: '',
-    answer5: '',
-    answer6: '',
+    answers: {
+      name: '',
+      quality: '',
+    },
   };
     
   handleChange = e => {
     this.setState({
       name: e.nativeEvent.text,
     })
-    console.log(this.state.name);
   }
 
   handleChangeA1 = e => {
+    answers[1] = {
+      name:e.nativeEvent.text,
+      quality: 'right',
+    }
     this.setState({
-      answer1: e.nativeEvent.text
+      answers: answers
     });
   }
 
   handleChangeA2 = e => {
+    answers[2] ={
+      name: e.nativeEvent.text,
+      quality: 'wrong',
+    }
     this.setState({
-      answer2: e.nativeEvent.text
+      answers:answers
     });
   }
 
   handleChangeA3 = e => {
+    answers[3] = {
+      name: e.nativeEvent.text,
+      quality: 'wrong',
+    }
     this.setState({
-      answer3: e.nativeEvent.text
+      answers:answers
     });
   }
 
   handleChangeA4 = e => {
+    answers[4] = {
+      name: e.nativeEvent.text,
+      quality: 'wrong',
+    }
     this.setState({
-      answer4: e.nativeEvent.text
+      answers:answers
     });
   }
 
   handleChangeA5 = e => {
+    answers[5] = {
+      name: e.nativeEvent.text,
+      quality: 'wrong',
+    }
     this.setState({
-      answer5: e.nativeEvent.text
+      answers:answers
     });
   }
 
   handleChangeA6 = e => {
+    answers[6] = {
+      name: e.nativeEvent.text,
+      quality: 'wrong',
+    }
     this.setState({
-      answer6: e.nativeEvent.text
+      answers:answers
     });
   }
 
@@ -133,37 +150,37 @@ export default class DetailScreen extends React.Component {
         <Text>Antworten:</Text>
         <TextInput
           label="richtige Antwort"
-          placeholder = {this.state.answer1}
+          placeholder = {typeof this.state.answers[1] !== "undefined" ? this.state.answers[1].name : ''}
           onChange={this.handleChangeA1}
           editable/>
         <Text/>
         <TextInput
           label="Falsche Antwort"
-          placeholder = {this.state.answer2}
+          placeholder = {typeof this.state.answers[2] !== "undefined" ? this.state.answers[2].name : ''}
           onChange={this.handleChangeA2}
           editable/>
         <Text/>      
         <TextInput
           label="Falsche Antwort"
-          placeholder = {this.state.answer3}
+          placeholder = {typeof this.state.answers[3] !== "undefined" ? this.state.answers[3].name : ''}
           onChange={this.handleChangeA3}
           editable/>
         <Text/>      
         <TextInput
           label="Falsche Antwort"
-          placeholder = {this.state.answer4}
+          placeholder = {typeof this.state.answers[4] !== "undefined" ? this.state.answers[4].name : ''}
           onChange={this.handleChangeA4}
           editable/>
         <Text/>      
         <TextInput
           label="Falsche Antwort"
-          placeholder = {this.state.answer5}
+          placeholder = {typeof this.state.answers[5] !== "undefined" ? this.state.answers[5].name : ''}
           onChange={this.handleChangeA5}
           editable/>
         <Text/>      
         <TextInput
           label="Falsche Antwort"
-          placeholder = {this.state.answer6}
+          placeholder = {typeof this.state.answers[6] !== "undefined" ? this.state.answers[6].name : ''}
           onChange={this.handleChangeA6}
           editable/>
         <Text/>

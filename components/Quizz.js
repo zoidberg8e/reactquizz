@@ -11,7 +11,11 @@ export default class DetailScreen extends React.Component {
   }
 
   answer = a => {
-    console.log("FAAAAAAALSCH");
+    if(a.quality === "right"){
+      alert("RRRISCHDIIISCH");
+    }else {
+      alert("FAAAAALSCH");
+    }
   }
 
   componentDidMount(){
@@ -33,45 +37,24 @@ export default class DetailScreen extends React.Component {
     return (
       <ScrollView>
         <Text>Fragen in {this.state.category}:</Text>
-        {this.state.questions.map((question,name)=> (<View style={styles.wrapper} name={name}>
-          <Text>{question.name}</Text>
-          <Button
-            style={styles.button}
-            title={question.answer1}
-            onPress={this.answer(question.answer1)}
-          />
-          <Text/>
-          <Button
-            style={styles.button}
-            title={question.answer2}
-            onPress={this.answer(question.answer2)}
-          />
-          <Text/>
-          <Button
-            style={styles.button}
-            title={question.answer3}
-            onPress={this.answer(question.answer3)}
-          />
-          <Text/>
-          <Button
-            style={styles.button}
-            title={question.answer4}
-            onPress={this.answer(question.answer4)}
-          />
-          <Text/>
-          <Button
-            style={styles.button}
-            title={question.answer5}
-            onPress={this.answer(question.answer5)}
-          />
-          <Text/>
-          <Button
-            style={styles.button}
-            title={question.answer6}
-            onPress={this.answer(question.answer6)}
-          />
-          <Text/>
-        </View>))}
+        {this.state.questions.length > 1
+          ?<mcQuestion>
+            {this.state.questions.map((question,name)=> (<View style={styles.wrapper} name={name}>
+              <Text>{question.name}</Text>
+              {question.answers.map((answer)=> (<View style={styles.wrapper}>
+                <Button
+                  style={styles.button}
+                  title={answer.name}
+                  onPress={this.answer(answer)}
+                />
+                <Text/>
+              </View>))}
+            </View>))}
+          </mcQuestion>
+          :<textQuestion>
+            <Text>{this.state.questions[1].name}</Text>
+          </textQuestion>
+        }
       </ScrollView>
     );
   }
