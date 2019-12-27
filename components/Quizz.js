@@ -18,6 +18,22 @@ export default class DetailScreen extends React.Component {
     }
   }
 
+  handleAnswer = a => {
+    console.log(a.nativeEvent.text);
+    this.setState({
+      textAnswer: a.nativeEvent.text,
+    })
+  }
+
+  onTextAnswer = a => {
+    console.log(a);
+    if( this.state.textAnswer === a) {
+      alert("This is right");
+    } else { 
+      alert("this is wrong");
+    }
+  }
+
   componentDidMount(){
     
   }
@@ -37,24 +53,37 @@ export default class DetailScreen extends React.Component {
     return (
       <ScrollView>
         <Text>Fragen in {this.state.category}:</Text>
-        {this.state.questions.length > 1
-          ?<mcQuestion>
-            {this.state.questions.map((question,name)=> (<View style={styles.wrapper} name={name}>
+        {this.state.questions.map((question,name)=> (<View style={styles.wrapper} name={name}>
+          {question.answers.length > 2
+            ?<View>
+              {question.answers.length == 3 
+                ?<Text> ist eine Ja/nein Frage</Text>
+                :<Text>Dies ist eine Multiple choice frage mit {question.answers.length-1} Möglichkeiten</Text>
+              }
               <Text>{question.name}</Text>
               {question.answers.map((answer)=> (<View style={styles.wrapper}>
                 <Button
                   style={styles.button}
                   title={answer.name}
-                  onPress={this.answer(answer)}
+                  onPress={()=>this.answer(answer)}
                 />
                 <Text/>
               </View>))}
-            </View>))}
-          </mcQuestion>
-          :<textQuestion>
-            <Text>{this.state.questions[1].name}</Text>
-          </textQuestion>
-        }
+            </View>
+            :<View>
+              <Text>Dies ist eine Textfrage</Text>
+              <TextInput
+                onChange={this.handleAnswer}
+                editable
+              />
+              <Button
+                  style={styles.button}
+                  title={"beantworten"}
+                  onPress={()=>this.onTextAnswer(question.answers[1].name)}
+              />
+            </View>
+          }
+        </View>))}
       </ScrollView>
     );
   }
