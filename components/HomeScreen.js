@@ -13,11 +13,13 @@ export default class HomeScreen extends React.Component {
   state = {
     categories: categories
   };
+  //this gets the categories from the database
   componentDidMount(){
   categoriesRef.on('value', snapshot => {
       let data = snapshot.val();
       if( data ){
         let categories = Object.values(data);
+        console.log(categories);
         this.setState({ categories });
       } else {
         console.log("category data is empty");
@@ -32,7 +34,7 @@ export default class HomeScreen extends React.Component {
         <Button
           style={styles.button}
           title="Kategorie hinzufügen"
-          onPress={() => this.props.navigation.navigate('detail')}
+          onPress={() => this.props.navigation.navigate('detail',{newCat: 1})}
         />
         <Text/>
         {this.state.categories.map((category,name)=> (<View style={styles.wrapper} name={name}>
@@ -43,8 +45,7 @@ export default class HomeScreen extends React.Component {
           />
         <Text/>
         </View>))}
-        
-          <Button style={styles.spacer} title="Ausloggen" onPress={() => firebase.auth(app).signOut()} mode="contained">Ausloggen</Button>
+        <Button style={styles.spacer} title="Ausloggen" onPress={() => firebase.auth(app).signOut()} mode="contained">Ausloggen</Button>
       </ScrollView>
     );
   }

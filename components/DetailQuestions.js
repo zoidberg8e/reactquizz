@@ -1,7 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, ScrollView, Button } from 'react-native';
 import { TextInput } from 'react-native-paper';
-import * as firebase from 'firebase';
 import 'firebase/firestore';
 import 'firebase/auth';
 import { db } from '../firebase';
@@ -9,6 +8,7 @@ import { db } from '../firebase';
 const questionsRef = db.ref('/questions');
 var gotParam = 0;
 var answers = [];
+var old = 1;
 
 let addQuestion = item => {
   console.log(item);
@@ -20,32 +20,42 @@ let addQuestion = item => {
 };
 
 let rm = item => {
-  categoriesRef.child(item).remove()
-  .then(function() {
-    console.log("Remove succeeded.")
-    console.log(item);
+  console.log("removing question: ");
+  console.log(item);
+  var query = questionsRef.orderByChild("name").equalTo(item);
+  query.once("value", function(snapshot) {
+    snapshot.forEach(function(child) {
+      child.ref.remove()
+      .then(function() {
+        console.log("Remove succeeded.")
+        console.log(item);
+      })
+      .catch(function(error) {
+        console.log("Remove failed: " + error.message)
+      });
+    })
   })
-  .catch(function(error) {
-    console.log("Remove failed: " + error.message)
-  });
 }
 
 export default class DetailScreen extends React.Component {
   state = {
     name: '',
+    nameold: '',
     category: '',
     answers: {
       name: '',
       quality: '',
     },
   };
-    
+
+  //This handles change in the input field
   handleChange = e => {
     this.setState({
       name: e.nativeEvent.text,
     })
   }
 
+  //The following handles handle changes in the input of the corresponding Answer fields
   handleChangeA1 = e => {
     answers[1] = {
       name:e.nativeEvent.text,
@@ -106,34 +116,28 @@ export default class DetailScreen extends React.Component {
     });
   }
 
+  //This handles the Submission of new Content to the Database if the question was modified remove the old one.
   handleSubmit = () => {
-    console.log(this.state);
+    if( old == 1 ){
+      rm(this.state.nameold);
+    }
     addQuestion(this.state);
   };
 
+
+  //This handles the removal of data from the database, this will be called when removing or changing a question.
   handleRemove = () => {
     rm(this.state.name);
-  }
-
-  componentDidMount(){
-/*    questionsRef.on('value', snapshot => {
-      let data = snapshot.val();
-      if( data ){
-        let questions = Object.values(data);
-        this.setState({ questions });
-      } else {
-        console.log("Question data is empty");
-        console.log(data)
-      }
-    });*/
-    console.log("this is the question screen speaking");
   }
 
   render(){
     if( this.props.navigation.getParam('question','').name && gotParam == 0){
       console.log("a question was delivered"+this.props.navigation.getParam('question').name);
       this.state = this.props.navigation.getParam('question', '');
+      this.state.nameold = this.props.navigation.getParam('question', '').name;
       gotParam = 1;
+    }else{
+      old = 0;
     }
     if( this.props.navigation.getParam('category', '') ) {
       this.state.category = this.props.navigation.getParam('category', '');

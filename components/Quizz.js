@@ -10,11 +10,12 @@ export default class DetailScreen extends React.Component {
     category: category,
   }
 
+  //deals with non text answers
   answer = a => {
     if(a.quality === "right"){
-      alert("RRRISCHDIIISCH");
+      alert("Richtig");
     }else {
-      alert("FAAAAALSCH");
+      alert("Falsch");
     }
   }
 
@@ -25,12 +26,13 @@ export default class DetailScreen extends React.Component {
     })
   }
 
+  //Deals with text answers
   onTextAnswer = a => {
     console.log(a);
     if( this.state.textAnswer === a) {
-      alert("This is right");
+      alert("Richtig");
     } else { 
-      alert("this is wrong");
+      alert("Falsch");
     }
   }
 
@@ -57,8 +59,8 @@ export default class DetailScreen extends React.Component {
           {question.answers.length > 2
             ?<View>
               {question.answers.length == 3 
-                ?<Text> ist eine Ja/nein Frage</Text>
-                :<Text>Dies ist eine Multiple choice frage mit {question.answers.length-1} Möglichkeiten</Text>
+                ?<Text> ist eine Ja/nein Frage:</Text>
+                :<Text>Dies ist eine Multiple choice frage mit {question.answers.length-1} Möglichkeiten:</Text>
               }
               <Text>{question.name}</Text>
               {question.answers.map((answer)=> (<View style={styles.wrapper}>
@@ -71,7 +73,9 @@ export default class DetailScreen extends React.Component {
               </View>))}
             </View>
             :<View>
-              <Text>Dies ist eine Textfrage</Text>
+              <Text/>
+              <Text>Dies ist eine Textfrage:</Text>
+              <Text>{question.name}</Text>
               <TextInput
                 onChange={this.handleAnswer}
                 editable

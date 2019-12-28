@@ -1,16 +1,15 @@
 import React from 'react';
 import { StyleSheet, Text, ScrollView, Button, View } from 'react-native';
 import { TextInput } from 'react-native-paper';
-import * as firebase from 'firebase';
 import 'firebase/firestore';
 import 'firebase/auth';
 import { db } from '../firebase';
 
-//var category = this.props.navigation.state.params.category;
 var category = '';
 let questionsRef = db.ref('/questions');
 let categoriesRef = db.ref('/categories');
 var questions = [];
+var old = 1;
 
 let addCategory = item => {
   categoriesRef.push({
@@ -19,14 +18,21 @@ let addCategory = item => {
 };
 
 let rmCategory = item => {
-  categoriesRef.child(item).remove()
-  .then(function() {
-    console.log("Remove succeeded.")
-    console.log(item);
+  console.log("removing category: ");
+  console.log(item);
+  var query = categoriesRef.orderByChild("name").equalTo(item);
+  query.once("value", function(snapshot) {
+    snapshot.forEach(function(child) {
+      child.ref.remove()
+      .then(function() {
+        console.log("Remove succeeded.")
+        console.log(item);
+      })
+      .catch(function(error) {
+        console.log("Remove failed: " + error.message)
+      });
+    })
   })
-  .catch(function(error) {
-    console.log("Remove failed: " + error.message)
-  });
 }
 
 
@@ -44,15 +50,20 @@ export default class DetailScreen extends React.Component {
   }
 
   handleSubmit = () => {
-    addCategory(this.state.name);
     console.log(this.state.name);
+    console.log(this.state.category);
+    if( old == 1){
+      rmCategory(this.state.category);
+    }
+    addCategory(this.state.name);
   };
 
   handleRemove = () => {
-    rmCategory(this.state.name);
+    rmCategory(this.state.category);
   }
 
   componentDidMount(){
+    //this gets the question data from the dataase
     questionsRef.on('value', snapshot => {
       let data = snapshot.val();
       if( data ){
@@ -73,6 +84,9 @@ export default class DetailScreen extends React.Component {
   }
   render(){
     this.state.category = this.props.navigation.getParam('category');
+    if( this.props.navigation.getParam('newCat')){
+      old = 0;
+    }
     console.log("this are the questions from detail");
     console.log(this.state.questions);
     return (
